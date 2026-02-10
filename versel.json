@@ -1,0 +1,8 @@
+{
+  "version": 2,
+  "name": "maxline-employee-test",
+  "cleanUrls": true,
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/index.html" }
+  ]
+}

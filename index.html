@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAXLINE | Тестирование сотрудников</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+<div class="container">
+    <!-- Шапка -->
+    <header class="header">
+        <div class="logo">
+            <h1>MAXLINE</h1>
+            <span class="live-badge">TEAM TEST</span>
+        </div>
+        <div class="header-info">
+            <div class="timer" id="timer">00:00:00</div>
+        </div>
+    </header>
+
+    <!-- Основной контент - только тест -->
+    <main class="test-container">
+        <div class="test-section">
+            <div class="test-header">
+                <h2><i class="fas fa-graduation-cap"></i> Тестирование сотрудников</h2>
+                <div class="progress">
+                    <div class="progress-bar" id="progressBar"></div>
+                    <span id="progressText">Вопрос 1 из 8</span>
+                </div>
+            </div>
+
+            <div class="question-container">
+                <div class="question-card" id="questionCard">
+                    <!-- Вопросы и варианты будут здесь -->
+                </div>
+
+                <div class="navigation">
+                    <button class="btn btn-secondary" id="prevBtn" disabled>
+                        <i class="fas fa-arrow-left"></i> Назад
+                    </button>
+                    <button class="btn btn-primary" id="nextBtn">
+                        Далее <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn btn-success" id="finishBtn" style="display: none;">
+                        <i class="fas fa-check-circle"></i> Завершить тест
+                    </button>
+                </div>
+
+                <div class="results" id="resultsSection" style="display: none;">
+                    <!-- Результаты будут здесь -->
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
