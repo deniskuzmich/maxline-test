@@ -4,7 +4,7 @@ const questions = [
         id: 1,
         question: "С каким минимальным и максимальным коэффициентом можно использовать фрибет?",
         options: ["1.2 - 2.0", "1.5 - 2.5", "1.5 - 3.0", "1.4 - 3.0"],
-        correct: 2 // Индекс правильного ответа (нумерация с 0)
+        correct: 2
     },
     {
         id: 2,
@@ -56,10 +56,11 @@ let userAnswers = new Array(questions.length).fill(null);
 let testCompleted = false;
 let testStartTime = null;
 let testDuration = 0;
+let autoNextTimeout = null;
 
 // Элементы DOM
 const questionCard = document.getElementById('questionCard');
-const progressBar = document.getElementById('progressBar');
+const progressFill = document.getElementById('progressFill');
 const progressText = document.getElementById('progressText');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
@@ -82,7 +83,7 @@ function showQuestion() {
 
     let optionsHtml = '';
     question.options.forEach((option, index) => {
-        const letter = String.fromCharCode(65 + index); // A, B, C, D
+        const letter = String.fromCharCode(65 + index);
         const isSelected = userAnswers[currentQuestion] === index;
 
         let optionClass = 'option';
@@ -106,13 +107,24 @@ function showQuestion() {
     `;
 }
 
-// Выбор варианта ответа
+// Выбор варианта ответа с автопереходом
 function selectOption(optionIndex) {
     if (testCompleted) return;
 
     userAnswers[currentQuestion] = optionIndex;
     showQuestion();
     updateNavigationButtons();
+
+    // Автопереход к следующему вопросу через 0.5 секунды
+    clearTimeout(autoNextTimeout);
+    autoNextTimeout = setTimeout(() => {
+        if (currentQuestion < questions.length - 1) {
+            nextQuestion();
+        } else {
+            // Если это последний вопрос, показываем кнопку завершения
+            updateNavigationButtons();
+        }
+    }, 500);
 }
 
 // Следующий вопрос
@@ -138,9 +150,11 @@ function prevQuestion() {
 // Обновление прогресса
 function updateProgress() {
     const progress = ((currentQuestion + 1) / questions.length) * 100;
-    const progressBarElement = progressBar.querySelector('::after') || progressBar;
-    progressBar.style.setProperty('--progress-width', `${progress}%`);
-    progressBar.style.width = `${progress}%`;
+
+    if (progressFill) {
+        progressFill.style.width = `${progress}%`;
+    }
+
     progressText.textContent = `Вопрос ${currentQuestion + 1} из ${questions.length}`;
 }
 
@@ -150,18 +164,13 @@ function updateNavigationButtons() {
 
     const allAnswered = userAnswers.every(answer => answer !== null);
 
+    // Всегда скрываем кнопку "Далее", так как переход автоматический
+    nextBtn.style.display = 'none';
+
     if (allAnswered) {
-        nextBtn.style.display = 'none';
         finishBtn.style.display = 'flex';
     } else {
-        nextBtn.style.display = 'flex';
         finishBtn.style.display = 'none';
-
-        if (currentQuestion === questions.length - 1) {
-            nextBtn.disabled = true;
-        } else {
-            nextBtn.disabled = false;
-        }
     }
 }
 
@@ -207,6 +216,7 @@ function finishTest() {
         answerReview.push({
             question: question.question,
             userAnswer: answer !== null ? question.options[answer] : 'Нет ответа',
+            correctAnswer: question.options[question.correct],
             isCorrect: isCorrect,
             questionNumber: index + 1
         });
@@ -217,6 +227,7 @@ function finishTest() {
             wrongAnswers.push({
                 question: question.question,
                 userAnswer: answer !== null ? question.options[answer] : 'Нет ответа',
+                correctAnswer: question.options[question.correct],
                 questionNumber: index + 1
             });
         }
@@ -257,25 +268,33 @@ function finishTest() {
                         <div class="wrong-answer">
                             <i class="fas fa-times"></i> Ваш ответ: ${item.userAnswer}
                         </div>
+                        <div class="wrong-answer" style="color: #00ff88; margin-top: 5px;">
+                            <i class="fas fa-check"></i> Правильный ответ: ${item.correctAnswer}
+                        </div>
                     </div>
                 `).join('')}
             </div>
         `;
     }
 
-    // Создаем обзор ответов
+    // Создаем обзор всех ответов
     let answerReviewHtml = `
         <div class="answer-review">
-            <h4><i class="fas fa-clipboard-check"></i> Обзор ответов:</h4>
+            <h4><i class="fas fa-clipboard-check"></i> Обзор всех ответов:</h4>
             ${answerReview.map(item => `
                 <div class="answer-item ${item.isCorrect ? 'correct' : 'incorrect'}">
                     <div class="answer-question">${item.questionNumber}. ${item.question}</div>
                     <div class="answer-user">
                         Ваш ответ: ${item.userAnswer}
                         <span class="answer-status ${item.isCorrect ? 'correct' : 'incorrect'}">
-                            ${item.isCorrect ? 'Правильно' : 'Неправильно'}
+                            ${item.isCorrect ? '✓ Правильно' : '✗ Неправильно'}
                         </span>
                     </div>
+                    ${!item.isCorrect ? `
+                        <div class="answer-user" style="color: #00ff88; margin-top: 5px;">
+                            Правильный ответ: ${item.correctAnswer}
+                        </div>
+                    ` : ''}
                 </div>
             `).join('')}
         </div>
@@ -308,12 +327,18 @@ function restartTest() {
     testCompleted = false;
     testStartTime = null;
     testDuration = 0;
+    clearTimeout(autoNextTimeout);
 
     questionCard.style.display = 'block';
     resultsSection.style.display = 'none';
-    nextBtn.style.display = 'flex';
+    nextBtn.style.display = 'none';
     prevBtn.style.display = 'flex';
     finishBtn.style.display = 'none';
+
+    // Сбрасываем прогресс-бар
+    if (progressFill) {
+        progressFill.style.width = `${(1 / questions.length) * 100}%`;
+    }
 
     initTest();
 }
@@ -343,12 +368,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
-// Добавляем стиль для динамического прогресс-бара
-const style = document.createElement('style');
-style.textContent = `
-    .progress-bar::after {
-        width: var(--progress-width, 12.5%);
-    }
-`;
-document.head.appendChild(style);

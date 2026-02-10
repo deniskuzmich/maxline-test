@@ -9,7 +9,6 @@
 </head>
 <body>
 <div class="container">
-    <!-- Шапка -->
     <header class="header">
         <div class="logo">
             <h1>MAXLINE</h1>
@@ -20,13 +19,14 @@
         </div>
     </header>
 
-    <!-- Основной контент - только тест -->
     <main class="test-container">
         <div class="test-section">
             <div class="test-header">
                 <h2><i class="fas fa-graduation-cap"></i> Тестирование сотрудников</h2>
                 <div class="progress">
-                    <div class="progress-bar" id="progressBar"></div>
+                    <div class="progress-bar" id="progressBar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
                     <span id="progressText">Вопрос 1 из 8</span>
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     <button class="btn btn-secondary" id="prevBtn" disabled>
                         <i class="fas fa-arrow-left"></i> Назад
                     </button>
-                    <button class="btn btn-primary" id="nextBtn">
+                    <button class="btn btn-primary" id="nextBtn" style="display: none;">
                         Далее <i class="fas fa-arrow-right"></i>
                     </button>
                     <button class="btn btn-success" id="finishBtn" style="display: none;">

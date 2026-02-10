@@ -111,16 +111,18 @@ body {
     border-radius: 4px;
     margin-bottom: 8px;
     overflow: hidden;
+    position: relative;
 }
 
-.progress-bar::after {
-    content: '';
-    display: block;
+.progress-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
     height: 100%;
-    width: 12.5%; /* 1/8 для первого вопроса */
+    width: 12.5%; /* Начальное значение для первого вопроса (1/8) */
     background: linear-gradient(90deg, #00ff88 0%, #00cc6a 100%);
     border-radius: 4px;
-    transition: width 0.5s ease;
+    transition: width 0.3s ease;
 }
 
 #progressText {
@@ -195,6 +197,11 @@ body {
     color: #00a2ff;
     font-size: 18px;
     flex-shrink: 0;
+}
+
+.option.selected .option-letter {
+    background: rgba(0, 162, 255, 0.3);
+    color: #ffffff;
 }
 
 .option-text {
