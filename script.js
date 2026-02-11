@@ -537,7 +537,7 @@ function updateTestTimer() {
 
 // Запуск таймера вопроса
 function startQuestionTimer() {
-    questionTimeLeft = 20;
+    questionTimeLeft = 30;
     updateQuestionTimerDisplay();
 
     questionTimer = setInterval(() => {
