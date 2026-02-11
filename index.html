@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAXLINE | Тестирование сотрудников</title>
+    <title>MAXLINE | Тестирование</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
@@ -13,47 +13,82 @@
         <div class="logo">
             <h1>MAXLINE</h1>
         </div>
-        <div class="header-info">
-            <div class="timer" id="timer">00:00:00</div>
-        </div>
     </header>
 
-    <main class="test-container">
+    <div class="start-screen" id="startScreen">
+        <div class="start-content">
+            <div class="start-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h2>Тестирование сотрудников</h2>
+            <p class="start-description">
+                Проверка знаний правил бонусной программы.<br>
+                Тест содержит 23 вопроса.
+            </p>
+            <div class="test-info">
+                <div class="info-item">
+                    <i class="fas fa-question-circle"></i>
+                    <span>23 вопроса</span>
+                </div>
+                <div class="info-item">
+                    <i class="fas fa-clock"></i>
+                    <span>20 сек на вопрос</span>
+                </div>
+            </div>
+            <button class="btn btn-start" id="startBtn">
+                <i class="fas fa-play"></i> Начать тест
+            </button>
+        </div>
+    </div>
+
+    <main class="test-container" id="testContainer" style="display: none;">
         <div class="test-section">
             <div class="test-header">
-                <h2><i class="fas fa-graduation-cap"></i> Тестирование сотрудников</h2>
+                <h2><i class="fas fa-graduation-cap"></i> Тестирование</h2>
                 <div class="header-controls">
                     <div class="progress">
-                        <div class="progress-bar" id="progressBar">
+                        <div class="progress-bar">
                             <div class="progress-fill" id="progressFill"></div>
                         </div>
                         <span id="progressText">Вопрос 1 из 23</span>
                     </div>
                     <div class="question-timer">
-                        <div class="timer-circle">
-                            <span id="questionTimer">20</span> сек
+                        <div class="timer-circle" id="timerCircle">
+                            <span id="questionTimer">20</span>
+                            <span>сек</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="question-container">
-                <div class="question-card" id="questionCard">
-                    <!-- Вопросы и варианты будут здесь -->
+                <div class="question-card">
+                    <div id="questionText" class="question-text"></div>
+                    <div id="optionsContainer" class="options-container"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main class="test-container" id="resultsContainer" style="display: none;">
+        <div class="test-section">
+            <div class="results active">
+                <h3>Тестирование завершено</h3>
+                <div class="score-card">
+                    <div class="score-total">Ваш результат:</div>
+                    <div class="score-number"><span id="scoreValue">0</span> / <span id="totalValue">23</span></div>
+                    <div id="scoreMessage"></div>
                 </div>
 
-                <div class="navigation">
-                    <button class="btn btn-secondary" id="prevBtn" disabled>
-                        <i class="fas fa-arrow-left"></i> Назад
-                    </button>
-                    <button class="btn btn-success" id="finishBtn" style="display: none;">
-                        <i class="fas fa-check-circle"></i> Завершить тест
-                    </button>
+                <div class="wrong-answers-section" id="wrongAnswersSection" style="display: none;">
+                    <h4><i class="fas fa-exclamation-triangle"></i> Допущены ошибки в вопросах:</h4>
+                    <div class="wrong-answers-list" id="wrongAnswersList">
+                    </div>
                 </div>
 
-                <div class="results" id="resultsSection" style="display: none;">
-                    <!-- Результаты будут здесь -->
-                </div>
+                <button class="btn btn-start restart-btn" onclick="location.reload()">
+                    <i class="fas fa-redo"></i> Пройти заново
+                </button>
             </div>
         </div>
     </main>
