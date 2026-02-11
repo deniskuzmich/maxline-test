@@ -1,5 +1,5 @@
-// База данных вопросов для букмекерской компании
-const questions = [
+// База данных вопросов
+const questionsData = [
     {
         id: 1,
         question: "Для активации приветственного бонуса '333FS' нужно:",
@@ -9,7 +9,7 @@ const questions = [
             "Верификация, авторизация в приложении, пополнить от 30р, отыграть пополнение на 100%",
             "Верификация, авторизация в приложении, пополнение от 20р"
         ],
-        correct: 3
+        correct: 2
     },
     {
         id: 2,
@@ -20,7 +20,7 @@ const questions = [
             "Верификация, авторизация в приложении, пополнить от 30р, отыграть пополнение на 100%",
             "Верификация, авторизация в приложении, пополнение от 20р"
         ],
-        correct: 3
+        correct: 2
     },
     {
         id: 3,
@@ -127,10 +127,10 @@ const questions = [
     },
     {
         id: 16,
-        question: "К какому результату приведет невыполнение условий получения бонуса для участника, который находится на статусе Start Pro?",
+        question: "К какому результату приведет невыполнение условий по VIP CASHBACK для участника со статусом 'Start Pro'?",
         options: [
-            "Участник сохранит статус Start Pro, но не получит кэшбэк за прошедший месяц; понижение статуса для категории Start не предусмотрено.",
-            "Участник будет полностью исключен из программы VIP CASHBACK, и для возобновления участия ему потребуется повторная регистрация в акции",
+            "Участник сохранит статус Start Pro, но не получит кэшбэк за прошедший месяц",
+            "Участник будет полностью исключен из программы VIP CASHBACK и ему заново нужно будет принять участие",
             "Статус участника будет понижен на один уровень; он станет «Участником VIP CASHBACK без статуса» и продолжит участие в программе.",
             "Статус будет понижен до уровня Start Elite, так как при понижении внутри категории Start всегда выбирается крайний верхний статус следующей ступени."
         ],
@@ -220,7 +220,7 @@ const questions = [
         correct: 2
     },
     {
-        id: 25, // ОСТАВИЛИ (Активация)
+        id: 25,
         question: "Каковы обязательные условия для активации бонуса '22% к депозиту'?",
         options: [
             "Пополнение от 10 BYN и наличие любого аккаунта.",
@@ -231,7 +231,7 @@ const questions = [
         correct: 1
     },
     {
-        id: 26, // НОВЫЙ (Про время вывода для КАЗИНО)
+        id: 26,
         question: "Если игрок активировал бонус для игры в КАЗИНО и совершил вывод средств, через какое время ему станет доступно повторное использование этого бонуса?",
         options: [
             "Через 24 часа.",
@@ -239,21 +239,21 @@ const questions = [
             "Через 5 дней.",
             "Сразу после следующего пополнения."
         ],
-        correct: 1 // Правильный: 48 часов
+        correct: 1
     },
     {
-        id: 27, // ОСТАВИЛИ (Лимиты)
+        id: 27,
         question: "Какие лимиты установлены на максимальную сумму бонуса '22% к депозиту'?",
         options: [
             "Не более 101 BYN в день и не более 500 BYN за последние 30 дней.",
             "Ограничений по сумме нет, бонус начисляется на каждое пополнение.",
-            "Максимум 30 BYN за одно пополнение и 1000 BYN в месяц.",
+            "101 руб за каждое пополнение",
             "Максимум 500 BYN в день."
         ],
         correct: 0
     },
     {
-        id: 28, // НОВЫЙ (Очередность отыгрыша казино)
+        id: 28,
         question: "Как происходит начисление и отыгрыш бонусов для КАЗИНО, если у игрока накопилось несколько таких предложений?",
         options: [
             "Все бонусы суммируются и отыгрываются одновременно одной общей суммой.",
@@ -261,10 +261,10 @@ const questions = [
             "При получении нового бонуса старый автоматически аннулируется.",
             "Игрок сам выбирает в приложении, какой из бонусов отыгрывать первым."
         ],
-        correct: 1 // Правильный: Отыгрываются по очереди
+        correct: 1
     },
     {
-        id: 29, // Вопрос про активацию
+        id: 29,
         question: "Какое условие по депозиту должен выполнить игрок, чтобы участвовать в бонусе «1 000 000 BYN»?",
         options: [
             "Необходимо пополнить счет ровно на 20 BYN за 1 минуту до прогноза.",
@@ -272,10 +272,10 @@ const questions = [
             "Достаточно иметь на балансе 20 BYN, время пополнения значения не имеет.",
             "Нужно пополнить баланс на сумму от 100 BYN в течение текущих суток."
         ],
-        correct: 1 // Правильный: сумма за последние 5 дней
+        correct: 1
     },
     {
-        id: 30, // Вопрос про использование (правила)
+        id: 30,
         question: "Как система рассчитывает прогноз, если один из предложенных в тираже матчей не состоялся?",
         options: [
             "Этот матч автоматически считается угаданным для всех участников.",
@@ -283,22 +283,23 @@ const questions = [
             "Прогноз на данный матч считается неугаданным.",
             "Сумма приза уменьшается пропорционально количеству несостоявшихся матчей."
         ],
-        correct: 2 // Правильный: считается неугаданным
+        correct: 2
     }
 ];
 
-// Текущее состояние теста
+// Копия массива для работы
+let questions = [];
+
+// Глобальные переменные состояния
 let currentQuestion = 0;
-let userAnswers = new Array(questions.length).fill(null);
-let userCorrect = new Array(questions.length).fill(null); // null - не отвечен, true - правильно, false - неправильно
+let userAnswers = [];
+let userCorrect = [];
 let testCompleted = false;
 let testStartTime = null;
 let testDuration = 0;
 let autoNextTimeout = null;
 let questionTimer = null;
 let questionTimeLeft = 30;
-
-// Статистика
 let totalCorrect = 0;
 let totalWrong = 0;
 const MAX_WRONG = 2;
@@ -319,18 +320,39 @@ const correctCountEl = document.getElementById('correctCount');
 const wrongCountEl = document.getElementById('wrongCount');
 const wrongLimitEl = document.getElementById('wrongLimit');
 
-// Начало теста
+// --- ФУНКЦИИ РАНДОМИЗАЦИИ ---
+
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+}
+
+function prepareQuestions() {
+    // Делаем глубокую копию, чтобы не испортить исходные данные
+    questions = JSON.parse(JSON.stringify(questionsData));
+
+    // Перемешиваем сами вопросы
+    shuffleArray(questions);
+
+    // Перемешиваем ответы внутри каждого вопроса
+    questions.forEach(q => {
+        const correctOptionText = q.options[q.correct];
+        shuffleArray(q.options);
+        // Находим новый индекс правильного ответа после перемешивания строк
+        q.correct = q.options.indexOf(correctOptionText);
+    });
+}
+
+// --- ЛОГИКА ТЕСТА ---
+
 function startTest() {
-    // Скрываем стартовый экран
+    prepareQuestions(); // Перемешиваем перед началом
     startScreen.style.display = 'none';
-
-    // Показываем основной интерфейс теста
     testContainer.style.display = 'flex';
-
-    // Показываем таймер общего времени
     timerElement.style.display = 'block';
 
-    // Инициализируем тест
     resetTestState();
     testStartTime = new Date();
     showQuestion();
@@ -341,7 +363,6 @@ function startTest() {
     startQuestionTimer();
 }
 
-// Сброс состояния теста
 function resetTestState() {
     currentQuestion = 0;
     userAnswers = new Array(questions.length).fill(null);
@@ -349,18 +370,14 @@ function resetTestState() {
     totalCorrect = 0;
     totalWrong = 0;
     testCompleted = false;
-    testStartTime = null;
-    testDuration = 0;
     clearTimeout(autoNextTimeout);
     stopQuestionTimer();
-    updateScoreDisplay();
 }
 
-// Отображение текущего вопроса
 function showQuestion() {
     const question = questions[currentQuestion];
-
     let optionsHtml = '';
+
     question.options.forEach((option, index) => {
         const letter = String.fromCharCode(65 + index);
         const isSelected = userAnswers[currentQuestion] === index;
@@ -368,17 +385,13 @@ function showQuestion() {
 
         let optionClass = 'option';
         if (isSelected) {
-            if (isCorrect === true) {
-                optionClass += ' correct';
-            } else if (isCorrect === false) {
-                optionClass += ' incorrect';
-            } else {
-                optionClass += ' selected';
-            }
+            if (isCorrect === true) optionClass += ' correct';
+            else if (isCorrect === false) optionClass += ' incorrect';
+            else optionClass += ' selected';
         }
 
         optionsHtml += `
-            <div class="option ${optionClass}" onclick="selectOption(${index})" data-key="${index + 1}">
+            <div class="option ${optionClass}" onclick="selectOption(${index})">
                 <div class="option-letter">${letter}</div>
                 <div class="option-text">${option}</div>
             </div>
@@ -387,67 +400,37 @@ function showQuestion() {
 
     questionCard.innerHTML = `
         <div class="question-text">${currentQuestion + 1}. ${question.question}</div>
-        <div class="options-container">
-            ${optionsHtml}
-        </div>
+        <div class="options-container">${optionsHtml}</div>
     `;
 }
 
-// Выбор варианта ответа
 function selectOption(optionIndex) {
-    if (testCompleted) return;
+    if (testCompleted || userAnswers[currentQuestion] !== null) return;
 
-    // Если на этот вопрос уже отвечали, нужно вычесть из статистики
-    if (userAnswers[currentQuestion] !== null) {
-        const wasCorrect = userCorrect[currentQuestion];
-        if (wasCorrect === true) {
-            totalCorrect--;
-        } else if (wasCorrect === false) {
-            totalWrong--;
-        }
-    }
-
-    // Сохраняем новый ответ
     userAnswers[currentQuestion] = optionIndex;
-    const question = questions[currentQuestion];
-    const isCorrect = (optionIndex === question.correct);
+    const isCorrect = (optionIndex === questions[currentQuestion].correct);
     userCorrect[currentQuestion] = isCorrect;
 
-    // Обновляем статистику
-    if (isCorrect) {
-        totalCorrect++;
-    } else {
-        totalWrong++;
-    }
+    if (isCorrect) totalCorrect++;
+    else totalWrong++;
 
-    // Обновляем отображение счетчиков
     updateScoreDisplay();
 
-    // Проверяем лимит ошибок
     if (totalWrong > MAX_WRONG) {
         failTest();
         return;
     }
 
-    // Останавливаем таймер вопроса
     stopQuestionTimer();
-
-    // Обновляем отображение вопроса с подсветкой
     showQuestion();
     updateNavigationButtons();
 
-    // Автопереход к следующему вопросу через 0.3 секунды
-    clearTimeout(autoNextTimeout);
     autoNextTimeout = setTimeout(() => {
-        if (currentQuestion < questions.length - 1) {
-            nextQuestion();
-        } else {
-            updateNavigationButtons();
-        }
+        if (currentQuestion < questions.length - 1) nextQuestion();
+        else updateNavigationButtons();
     }, 300);
 }
 
-// Следующий вопрос
 function nextQuestion() {
     if (currentQuestion < questions.length - 1) {
         currentQuestion++;
@@ -459,7 +442,6 @@ function nextQuestion() {
     }
 }
 
-// Предыдущий вопрос
 function prevQuestion() {
     if (currentQuestion > 0) {
         currentQuestion--;
@@ -471,378 +453,158 @@ function prevQuestion() {
     }
 }
 
-// Прокрутка вверх
 function scrollToTop() {
-    const questionContainer = document.querySelector('.question-container');
-    if (questionContainer) {
-        questionContainer.scrollTop = 0;
-    }
+    const qc = document.querySelector('.question-container');
+    if (qc) qc.scrollTop = 0;
 }
 
-// Обновление прогресса
 function updateProgress() {
     const progress = ((currentQuestion + 1) / questions.length) * 100;
-
-    if (progressFill) {
-        progressFill.style.width = `${progress}%`;
-    }
-
+    if (progressFill) progressFill.style.width = `${progress}%`;
     progressText.textContent = `Вопрос ${currentQuestion + 1} из ${questions.length}`;
 }
 
-// Обновление кнопок навигации
 function updateNavigationButtons() {
-
-    const allAnswered = userAnswers.every(answer => answer !== null);
-
-    if (allAnswered) {
-        finishBtn.style.display = 'flex';
-    } else {
-        finishBtn.style.display = 'none';
-    }
+    const allAnswered = userAnswers.every(ans => ans !== null);
+    finishBtn.style.display = allAnswered ? 'flex' : 'none';
 }
 
-// Обновление отображения счетчиков правильных/неправильных ответов
 function updateScoreDisplay() {
     if (correctCountEl) correctCountEl.textContent = totalCorrect;
     if (wrongCountEl) wrongCountEl.textContent = totalWrong;
     if (wrongLimitEl) wrongLimitEl.textContent = `${totalWrong}/${MAX_WRONG}`;
 }
 
-// Запуск общего таймера теста
 function startTestTimer() {
-    testStartTime = new Date();
-    updateTestTimer();
-    setInterval(updateTestTimer, 1000);
+    setInterval(() => {
+        if (!testStartTime || testCompleted) return;
+        const now = new Date();
+        const diff = now - testStartTime;
+        const h = Math.floor(diff / 3600000);
+        const m = Math.floor((diff % 3600000) / 60000);
+        const s = Math.floor((diff % 60000) / 1000);
+        timerElement.textContent = `${h.toString().padStart(2,'0')}:${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+        testDuration = diff;
+    }, 1000);
 }
 
-// Обновление общего таймера теста
-function updateTestTimer() {
-    if (!testStartTime) return;
-
-    const now = new Date();
-    const diff = now - testStartTime;
-
-    const hours = Math.floor(diff / (1000 * 60 * 60));
-    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-    const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-    timerElement.textContent =
-        `${hours.toString().padStart(2, '0')}:` +
-        `${minutes.toString().padStart(2, '0')}:` +
-        `${seconds.toString().padStart(2, '0')}`;
-
-    testDuration = diff;
-}
-
-// Запуск таймера вопроса
 function startQuestionTimer() {
     questionTimeLeft = 30;
     updateQuestionTimerDisplay();
-
     questionTimer = setInterval(() => {
         questionTimeLeft--;
         updateQuestionTimerDisplay();
-
         if (questionTimeLeft <= 0) {
             stopQuestionTimer();
-            // Если на вопрос еще не ответили, засчитываем ошибку
-            if (userAnswers[currentQuestion] === null) {
-                handleTimeout();
-            }
+            if (userAnswers[currentQuestion] === null) handleTimeout();
         }
     }, 1000);
 }
 
-// Обработка истечения времени на вопрос
 function handleTimeout() {
-    // Записываем отсутствие ответа как ошибку
-    if (userAnswers[currentQuestion] !== null) return; // уже ответили
-
     userAnswers[currentQuestion] = null;
     userCorrect[currentQuestion] = false;
     totalWrong++;
     updateScoreDisplay();
-
-    // Проверяем лимит ошибок
-    if (totalWrong > MAX_WRONG) {
-        failTest();
-        return;
-    }
-
-    // Переходим к следующему вопросу
-    if (currentQuestion < questions.length - 1) {
-        nextQuestion();
-    } else {
-        updateNavigationButtons();
-    }
+    if (totalWrong > MAX_WRONG) failTest();
+    else if (currentQuestion < questions.length - 1) nextQuestion();
+    else updateNavigationButtons();
 }
 
-// Обновление отображения таймера вопроса
 function updateQuestionTimerDisplay() {
     if (questionTimerElement) {
         questionTimerElement.textContent = questionTimeLeft;
-
         if (timerCircle) {
             timerCircle.classList.remove('warning', 'danger');
-
-            if (questionTimeLeft <= 10 && questionTimeLeft > 5) {
-                timerCircle.classList.add('warning');
-            } else if (questionTimeLeft <= 5) {
-                timerCircle.classList.add('danger');
-            }
+            if (questionTimeLeft <= 10 && questionTimeLeft > 5) timerCircle.classList.add('warning');
+            else if (questionTimeLeft <= 5) timerCircle.classList.add('danger');
         }
     }
 }
 
-// Остановка таймера вопроса
 function stopQuestionTimer() {
-    if (questionTimer) {
-        clearInterval(questionTimer);
-        questionTimer = null;
-    }
+    clearInterval(questionTimer);
 }
 
-// Сброс таймера вопроса
 function resetQuestionTimer() {
     stopQuestionTimer();
     startQuestionTimer();
 }
 
-// Завершение теста досрочно из-за превышения лимита ошибок
 function failTest() {
     testCompleted = true;
     stopQuestionTimer();
-
-    // Форматирование времени теста
-    const durationMinutes = Math.floor(testDuration / (1000 * 60));
-    const durationSeconds = Math.floor((testDuration % (1000 * 60)) / 1000);
-
-    // Показ результатов
-    questionCard.style.display = 'none';
-    finishBtn.style.display = 'none';
-
-    resultsSection.style.display = 'block';
-    resultsSection.classList.add('active');
-
-    // Получаем список неправильных ответов
-    const wrongAnswers = [];
-    userAnswers.forEach((answer, index) => {
-        if (userCorrect[index] === false) {
-            wrongAnswers.push({
-                question: questions[index].question,
-                userAnswer: answer !== null ? questions[index].options[answer] : 'Время вышло',
-                questionNumber: index + 1
-            });
-        }
-    });
-
-    let wrongAnswersHtml = '';
-    if (wrongAnswers.length > 0) {
-        wrongAnswersHtml = `
-            <div class="wrong-answers-section">
-                <h4><i class="fas fa-exclamation-circle"></i> Неправильные ответы (${wrongAnswers.length}):</h4>
-                <div class="wrong-answers-list">
-                    ${wrongAnswers.map(item => `
-                        <div class="wrong-item">
-                            <div class="wrong-question">${item.questionNumber}. ${item.question}</div>
-                            <div class="wrong-answer">
-                                <i class="fas fa-times"></i> Ваш ответ: ${item.userAnswer}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        `;
-    }
-
-    resultsSection.innerHTML = `
-        <h3>Тест не сдан</h3>
-        <div class="score-card">
-            <div class="score-number">${totalCorrect}</div>
-            <div class="score-total">правильных ответов из ${questions.length}</div>
-            <div class="fail-message">
-                <i class="fas fa-exclamation-triangle"></i> Допущено более ${MAX_WRONG} ошибок (${totalWrong})
-            </div>
-            <div class="test-duration">
-                <i class="far fa-clock"></i> Время тестирования: ${durationMinutes} мин ${durationSeconds} сек
-            </div>
-        </div>
-        ${wrongAnswersHtml}
-        <div class="navigation">
-            <button class="btn btn-primary restart-btn" onclick="restartTest()">
-                <i class="fas fa-redo"></i> Пройти тест заново
-            </button>
-        </div>
-    `;
-
-    scrollToTop();
+    renderResults(false);
 }
 
-// Завершение теста (штатное, после ответа на все вопросы)
 function finishTest() {
     testCompleted = true;
-
-    // Останавливаем таймер вопроса
     stopQuestionTimer();
+    renderResults(true);
+}
 
-    // Пересчитываем статистику на всякий случай
-    totalCorrect = 0;
-    totalWrong = 0;
-    userAnswers.forEach((answer, index) => {
-        if (userCorrect[index] === true) totalCorrect++;
-        else if (userCorrect[index] === false) totalWrong++;
-    });
-    updateScoreDisplay();
-
-    // Форматирование времени теста
-    const durationMinutes = Math.floor(testDuration / (1000 * 60));
-    const durationSeconds = Math.floor((testDuration % (1000 * 60)) / 1000);
-
-    // Определение сообщения в зависимости от результата
-    let message = '';
-    let isPassed = totalWrong <= MAX_WRONG;
-    const percentage = (totalCorrect / questions.length) * 100;
-
-    if (isPassed) {
-        if (percentage >= 90) {
-            message = 'Отличный результат! Вы отлично знаете правила компании!';
-        } else if (percentage >= 70) {
-            message = 'Хороший результат!';
-        } else {
-            message = 'Тест сдан. Рекомендуется повторить материал.';
-        }
-    } else {
-        message = 'Тест не сдан. Допущено более 2 ошибок.';
-    }
-
-    // Показ результатов
+function renderResults(isFinished) {
     questionCard.style.display = 'none';
     finishBtn.style.display = 'none';
-
     resultsSection.style.display = 'block';
     resultsSection.classList.add('active');
 
-    // Получаем список неправильных ответов
+    const durationM = Math.floor(testDuration / 60000);
+    const durationS = Math.floor((testDuration % 60000) / 1000);
+
     const wrongAnswers = [];
-    userAnswers.forEach((answer, index) => {
-        if (userCorrect[index] === false) {
+    userAnswers.forEach((ans, i) => {
+        if (userCorrect[i] === false) {
             wrongAnswers.push({
-                question: questions[index].question,
-                userAnswer: answer !== null ? questions[index].options[answer] : 'Нет ответа',
-                questionNumber: index + 1
+                q: questions[i].question,
+                mine: ans !== null ? questions[i].options[ans] : 'Время вышло',
+                num: i + 1
             });
         }
     });
 
-    let wrongAnswersHtml = '';
-    if (wrongAnswers.length > 0) {
-        wrongAnswersHtml = `
-            <div class="wrong-answers-section">
-                <h4><i class="fas fa-exclamation-circle"></i> Неправильные ответы (${wrongAnswers.length}):</h4>
-                <div class="wrong-answers-list">
-                    ${wrongAnswers.map(item => `
-                        <div class="wrong-item">
-                            <div class="wrong-question">${item.questionNumber}. ${item.question}</div>
-                            <div class="wrong-answer">
-                                <i class="fas fa-times"></i> Ваш ответ: ${item.userAnswer}
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>
+    let wrongHtml = wrongAnswers.length > 0 ? `
+        <div class="wrong-answers-section">
+            <h4>Неправильные ответы (${wrongAnswers.length}):</h4>
+            <div class="wrong-answers-list">
+                ${wrongAnswers.map(item => `
+                    <div class="wrong-item">
+                        <div class="wrong-question">${item.num}. ${item.q}</div>
+                        <div class="wrong-answer"><i class="fas fa-times"></i> Ваш ответ: ${item.mine}</div>
+                    </div>
+                `).join('')}
             </div>
-        `;
-    } else {
-        wrongAnswersHtml = `
-            <div class="all-correct">
-                <i class="fas fa-check-circle"></i>
-                <h4>Все ответы правильные!</h4>
-                <p>Вы ответили правильно на все вопросы теста</p>
-            </div>
-        `;
-    }
+        </div>
+    ` : '<div class="all-correct"><h4>Идеально! Ошибок нет.</h4></div>';
+
+    const title = totalWrong > MAX_WRONG ? 'Тест не сдан' : 'Результаты тестирования';
+    const msg = totalWrong > MAX_WRONG ? `Допущено ошибок: ${totalWrong}. Лимит: ${MAX_WRONG}` : 'Поздравляем! Вы прошли проверку знаний.';
 
     resultsSection.innerHTML = `
-        <h3>Результаты тестирования</h3>
+        <h3>${title}</h3>
         <div class="score-card">
             <div class="score-number">${totalCorrect}</div>
-            <div class="score-total">правильных ответов из ${questions.length}</div>
-            <div class="score-message">${message}</div>
-            <div class="test-duration">
-                <i class="far fa-clock"></i> Время тестирования: ${durationMinutes} мин ${durationSeconds} сек
-            </div>
+            <div class="score-total">из ${questions.length} правильно</div>
+            <div class="score-message">${msg}</div>
+            <div class="test-duration">Время: ${durationM} мин ${durationS} сек</div>
         </div>
-        ${wrongAnswersHtml}
-        <div class="navigation">
-            <button class="btn btn-primary restart-btn" onclick="restartTest()">
-                <i class="fas fa-redo"></i> Пройти тест заново
-            </button>
-        </div>
+        ${wrongHtml}
+        <button class="btn btn-primary restart-btn" onclick="restartTest()"><i class="fas fa-redo"></i> На главную</button>
     `;
-
     scrollToTop();
 }
 
-// Перезапуск теста
 function restartTest() {
     resetTestState();
-
-    // Показываем стартовый экран
     startScreen.style.display = 'flex';
-
-    // Скрываем основной интерфейс теста
     testContainer.style.display = 'none';
-
-    // Скрываем результаты
     resultsSection.style.display = 'none';
     resultsSection.classList.remove('active');
-
-    // Сбрасываем прогресс-бар
-    if (progressFill) {
-        progressFill.style.width = `${(1 / questions.length) * 100}%`;
-    }
-
-    // Сбрасываем таймер вопроса
-    questionTimeLeft = 20;
-    if (questionTimerElement) {
-        questionTimerElement.textContent = questionTimeLeft;
-    }
-    if (timerCircle) {
-        timerCircle.classList.remove('warning', 'danger');
-    }
-
-    // Скрываем таймер общего времени
+    questionCard.style.display = 'block';
     timerElement.style.display = 'none';
-
-    // Сбрасываем счетчики
-    totalCorrect = 0;
-    totalWrong = 0;
-    updateScoreDisplay();
 }
 
-// Инициализация
 document.addEventListener('DOMContentLoaded', () => {
-    // Обработчик кнопки "Начать тест"
     startBtn.addEventListener('click', startTest);
-
-    // Обработчики кнопок теста
     finishBtn.addEventListener('click', finishTest);
-
-    // Горячие клавиши (работают только после начала теста)
-    document.addEventListener('keydown', (e) => {
-        if (testCompleted || startScreen.style.display !== 'none') return;
-
-        if (e.key === 'ArrowLeft' && currentQuestion > 0) {
-            prevQuestion();
-        } else if (e.key === 'ArrowRight' && currentQuestion < questions.length - 1) {
-            if (userAnswers[currentQuestion] !== null) {
-                nextQuestion();
-            }
-        } else if (e.key >= '1' && e.key <= '4') {
-            const optionIndex = parseInt(e.key) - 1;
-            selectOption(optionIndex);
-        } else if (e.key === 'Enter' && finishBtn.style.display !== 'none') {
-            finishTest();
-        }
-    });
 });
