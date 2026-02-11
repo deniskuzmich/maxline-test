@@ -105,7 +105,7 @@ const questionsData = [
     },
     {
         id: 14,
-        question: "Типы ставок подходящие под бонус '1000BYN серию неудачных ставок':",
+        question: "Типы ставок подходящие под бонус '1000BYN за серию неудачных ставок':",
         options: [
             "Только одинары (лайв/линия)",
             "Одинары и экспрессы",
@@ -287,10 +287,7 @@ const questionsData = [
     }
 ];
 
-// Копия массива для работы
 let questions = [];
-
-// Глобальные переменные состояния
 let currentQuestion = 0;
 let userAnswers = [];
 let userCorrect = [];
@@ -304,7 +301,7 @@ let totalCorrect = 0;
 let totalWrong = 0;
 const MAX_WRONG = 2;
 
-// Элементы DOM
+// DOM элементы
 const startScreen = document.getElementById('startScreen');
 const startBtn = document.getElementById('startBtn');
 const testContainer = document.querySelector('.test-container');
@@ -320,8 +317,7 @@ const correctCountEl = document.getElementById('correctCount');
 const wrongCountEl = document.getElementById('wrongCount');
 const wrongLimitEl = document.getElementById('wrongLimit');
 
-// --- ФУНКЦИИ РАНДОМИЗАЦИИ ---
-
+// Рандомизация
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -330,25 +326,18 @@ function shuffleArray(array) {
 }
 
 function prepareQuestions() {
-    // Делаем глубокую копию, чтобы не испортить исходные данные
     questions = JSON.parse(JSON.stringify(questionsData));
-
-    // Перемешиваем сами вопросы
     shuffleArray(questions);
-
-    // Перемешиваем ответы внутри каждого вопроса
     questions.forEach(q => {
-        const correctOptionText = q.options[q.correct];
+        const correctText = q.options[q.correct];
         shuffleArray(q.options);
-        // Находим новый индекс правильного ответа после перемешивания строк
-        q.correct = q.options.indexOf(correctOptionText);
+        q.correct = q.options.indexOf(correctText);
     });
 }
 
-// --- ЛОГИКА ТЕСТА ---
-
+// Управление тестом
 function startTest() {
-    prepareQuestions(); // Перемешиваем перед началом
+    prepareQuestions();
     startScreen.style.display = 'none';
     testContainer.style.display = 'flex';
     timerElement.style.display = 'block';
@@ -425,9 +414,14 @@ function selectOption(optionIndex) {
     showQuestion();
     updateNavigationButtons();
 
+    // Автопереход или автозавершение
     autoNextTimeout = setTimeout(() => {
-        if (currentQuestion < questions.length - 1) nextQuestion();
-        else updateNavigationButtons();
+        if (currentQuestion < questions.length - 1) {
+            nextQuestion();
+        } else {
+            // ЕСЛИ ЭТО ПОСЛЕДНИЙ ВОПРОС - ЗАВЕРШАЕМ
+            finishTest();
+        }
     }, 300);
 }
 
@@ -466,6 +460,7 @@ function updateProgress() {
 
 function updateNavigationButtons() {
     const allAnswered = userAnswers.every(ans => ans !== null);
+    // Кнопку "Завершить" оставляем для подстраховки, хотя теперь всё на автомате
     finishBtn.style.display = allAnswered ? 'flex' : 'none';
 }
 
@@ -476,8 +471,12 @@ function updateScoreDisplay() {
 }
 
 function startTestTimer() {
-    setInterval(() => {
-        if (!testStartTime || testCompleted) return;
+    // Используем переменную, чтобы иметь возможность полностью остановить интервал
+    const testInterval = setInterval(() => {
+        if (!testStartTime || testCompleted) {
+            clearInterval(testInterval);
+            return;
+        }
         const now = new Date();
         const diff = now - testStartTime;
         const h = Math.floor(diff / 3600000);
@@ -506,9 +505,15 @@ function handleTimeout() {
     userCorrect[currentQuestion] = false;
     totalWrong++;
     updateScoreDisplay();
-    if (totalWrong > MAX_WRONG) failTest();
-    else if (currentQuestion < questions.length - 1) nextQuestion();
-    else updateNavigationButtons();
+
+    if (totalWrong > MAX_WRONG) {
+        failTest();
+    } else if (currentQuestion < questions.length - 1) {
+        nextQuestion();
+    } else {
+        // Если время вышло на последнем вопросе - завершаем тест
+        finishTest();
+    }
 }
 
 function updateQuestionTimerDisplay() {
@@ -532,13 +537,13 @@ function resetQuestionTimer() {
 }
 
 function failTest() {
-    testCompleted = true;
+    testCompleted = true; // Это остановит общий таймер
     stopQuestionTimer();
     renderResults(false);
 }
 
 function finishTest() {
-    testCompleted = true;
+    testCompleted = true; // Это остановит общий таймер
     stopQuestionTimer();
     renderResults(true);
 }
@@ -586,7 +591,7 @@ function renderResults(isFinished) {
             <div class="score-number">${totalCorrect}</div>
             <div class="score-total">из ${questions.length} правильно</div>
             <div class="score-message">${msg}</div>
-            <div class="test-duration">Время: ${durationM} мин ${durationS} сек</div>
+            <div class="test-duration">Общее время: ${durationM} мин ${durationS} сек</div>
         </div>
         ${wrongHtml}
         <button class="btn btn-primary restart-btn" onclick="restartTest()"><i class="fas fa-redo"></i> На главную</button>
