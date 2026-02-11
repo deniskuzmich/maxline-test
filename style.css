@@ -13,6 +13,8 @@
     --border-color: rgba(0, 255, 136, 0.2);
     --shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
     --transition: all 0.3s ease;
+    --warning-color: #ff9800;
+    --danger-color: #ff5252;
 }
 
 * {
@@ -70,22 +72,6 @@ body {
     text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
 }
 
-.live-badge {
-    background: linear-gradient(90deg, #00cc6a 0%, var(--primary-color) 100%);
-    color: white;
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 14px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0% { opacity: 1; }
-    50% { opacity: 0.8; }
-    100% { opacity: 1; }
-}
-
 .header-info {
     display: flex;
     align-items: center;
@@ -141,6 +127,13 @@ body {
     gap: 10px;
 }
 
+/* Контейнер для прогресса и таймера вопроса */
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+}
+
 .progress {
     flex: 0 0 250px;
     text-align: right;
@@ -160,7 +153,7 @@ body {
     top: 0;
     left: 0;
     height: 100%;
-    width: 12.5%;
+    width: 4.35%; /* 1/23 для первого вопроса */
     background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary-color) 100%);
     border-radius: 4px;
     transition: var(--transition);
@@ -170,6 +163,63 @@ body {
     font-size: 14px;
     color: var(--text-secondary);
     display: block;
+}
+
+/* Таймер вопроса */
+.question-timer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.timer-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid var(--primary-color);
+    transition: all 0.3s ease;
+}
+
+.timer-circle.warning {
+    border-color: var(--warning-color);
+    animation: pulse 1s infinite;
+}
+
+.timer-circle.danger {
+    border-color: var(--danger-color);
+    animation: pulse 0.5s infinite;
+}
+
+.timer-circle #questionTimer {
+    font-size: 22px;
+    font-weight: bold;
+    color: var(--primary-color);
+    font-family: 'Courier New', monospace;
+}
+
+.timer-circle.warning #questionTimer {
+    color: var(--warning-color);
+}
+
+.timer-circle.danger #questionTimer {
+    color: var(--danger-color);
+}
+
+.timer-circle span + span {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
 }
 
 /* Контейнер вопроса */
@@ -405,15 +455,6 @@ body {
     gap: 8px;
 }
 
-.correct-answer {
-    color: var(--primary-color);
-    font-size: 14px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-top: 5px;
-}
-
 /* Сообщение, когда все ответы правильные */
 .all-correct {
     text-align: center;
@@ -478,13 +519,23 @@ body {
     .options-container {
         gap: 12px;
     }
+
+    .header-controls {
+        gap: 20px;
+    }
 }
 
 @media (max-width: 768px) {
     .test-header {
         flex-direction: column;
-        gap: 15px;
+        gap: 20px;
         text-align: center;
+    }
+
+    .header-controls {
+        width: 100%;
+        flex-direction: column;
+        gap: 15px;
     }
 
     .progress {
@@ -564,6 +615,15 @@ body {
     .wrong-item {
         padding: 15px;
     }
+
+    .timer-circle {
+        width: 60px;
+        height: 60px;
+    }
+
+    .timer-circle #questionTimer {
+        font-size: 18px;
+    }
 }
 
 @media (max-width: 480px) {
@@ -601,11 +661,6 @@ body {
         font-size: 24px;
     }
 
-    .live-badge {
-        padding: 5px 12px;
-        font-size: 12px;
-    }
-
     .results h3 {
         font-size: 22px;
     }
@@ -624,6 +679,15 @@ body {
 
     .all-correct i {
         font-size: 36px;
+    }
+
+    .timer-circle {
+        width: 55px;
+        height: 55px;
+    }
+
+    .timer-circle #questionTimer {
+        font-size: 16px;
     }
 }
 

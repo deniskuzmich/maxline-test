@@ -9,7 +9,7 @@ const questions = [
             "Верификация, авторизация в приложении, пополнить от 30р, отыграть пополнение на 100%",
             "Верификация, авторизация в приложении, пополнение от 20р"
         ],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 2,
@@ -20,7 +20,7 @@ const questions = [
             "Верификация, авторизация в приложении, пополнить от 30р, отыграть пополнение на 100%",
             "Верификация, авторизация в приложении, пополнение от 20р"
         ],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 3,
@@ -31,25 +31,25 @@ const questions = [
             "Одиночные ставки по линии и/или Live, а так же экспрессы c максимальным коэффициентом '5'.",
             "Одиночные ставки по линии и/или Live, а так же VIP ставки c максимальным коэффициентом '5'."
         ],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 4,
         question: "Максимальная сумма фрибет, которая возможна в бонусе 'Кешбек 100% на спорт':",
         options: ["5000", "1000", "101", "500"],
-        correct: 1 // Укажите индекс правильного ответа (0-3)
+        correct: 1
     },
     {
         id: 5,
         question: "С какими коэффициентами можно использовать фрибет?",
         options: ["до 3", "1.2 - 3", "1.5 - 5", "1.5 - 3"],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 6,
         question: "Минимальная и максимальная сумма, которую можно забрать в бонусе 'Кешбек 100% на казино':",
         options: ["1 - 1000", "10 - 10000", "1 - 101", "5 - 500"],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 7,
@@ -60,31 +60,31 @@ const questions = [
             "от 10 до 15 (16 по пятницам)",
             "от 4 до 20"
         ],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 8,
         question: "Минимальный и максимальный процент к выйгрышу в бонусе 'Экспресс буст':",
         options: ["от 5 до 20", "от 4 до 20", "от 4 до 100", "от 8 до 20"],
-        correct: 2 // Укажите индекс правильного ответа (0-3)
+        correct: 2
     },
     {
         id: 9,
         question: "С какими коэффициентами попадают события в бонус 'Экспресс буст':",
         options: ["от 1.2", "от 1.2 до 5", "от 1.5 - 3", "от 3"],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 10,
         question: "Максимальная сумма фрибет, которую можно получить в бонусе 'Экспресс буст':",
         options: ["5000 в месяц", "500 в месяц", "101 в день", "1000 в месяц"],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 11,
         question: "Максимальная сумма фрибет, которую можно получить в бонусе '1000BYN за серию неудачных ставок':",
         options: ["1000", "10000", "5000", "500"],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 12,
@@ -95,24 +95,24 @@ const questions = [
             "даты совершения ставок",
             "на усмотрение букмекера"
         ],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 13,
         question: "С какими коэффициентами попадают события в бонус '1000BYN за серию неудачных ставок':",
         options: ["1.5 - 3", "от 1.2", "от 3", "до 3"],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 14,
-        question: "Типы ставок подходящие под бонус '1000BYN серию неудачных ставок':",
+        question: "Типы ставки подходящие под бонус '1000BYN серию неудачных ставок':",
         options: [
             "Только одинары (лайв/линия)",
             "Одинары и экспрессы",
             "Одинары, экспрессы, VIP",
             "Все варианты верные"
         ],
-        correct: 1 // Укажите индекс правильного ответа (0-3)
+        correct: 1
     },
     {
         id: 15,
@@ -123,7 +123,7 @@ const questions = [
             "Верификация, нажать кнопку 'Принять участие', совершать ставки на спорт",
             "Правильных вариантов нет"
         ],
-        correct: 2 // Укажите индекс правильного ответа (0-3)
+        correct: 2
     },
     {
         id: 16,
@@ -134,13 +134,13 @@ const questions = [
             "ничего не происходит",
             "бонус становиться недоступным до конца месяца"
         ],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 17,
         question: "Минимальный и максимальный процент кешбека, который доступен в бонусе 'VIP кешбек':",
         options: ["8% и 20%", "10% и 30%", "4% и 100%", "5% и 50%"],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 18,
@@ -151,7 +151,7 @@ const questions = [
             "Gold и Maximum раз в три месяца",
             "Правильных вариантов нет"
         ],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 19,
@@ -162,7 +162,7 @@ const questions = [
             "Пополнил двумя платежами по 15р",
             "Все варианты верны"
         ],
-        correct: 3 // Укажите индекс правильного ответа (0-3)
+        correct: 3
     },
     {
         id: 20,
@@ -173,7 +173,7 @@ const questions = [
             "Множитель не подходит для бонуса",
             "Правильных вариантов нет"
         ],
-        correct: 2 // Укажите индекс правильного ответа (0-3)
+        correct: 2
     },
     {
         id: 21,
@@ -184,7 +184,7 @@ const questions = [
             "Множитель не подходит для бонуса",
             "Правильных вариантов нет"
         ],
-        correct: 0 // Укажите индекс правильного ответа (0-3)
+        correct: 0
     },
     {
         id: 22,
@@ -195,7 +195,7 @@ const questions = [
             "Пополнил на меньшую сумму, чем нужно",
             "Все варианты верны"
         ],
-        correct: 2 // Укажите индекс правильного ответа (0-3)
+        correct: 2
     },
     {
         id: 23,
@@ -206,7 +206,7 @@ const questions = [
             "Пополнил на меньшую сумму, чем нужно",
             "Все варианты верны"
         ],
-        correct: 1 // Укажите индекс правильного ответа (0-3)
+        correct: 1
     }
 ];
 
@@ -217,6 +217,8 @@ let testCompleted = false;
 let testStartTime = null;
 let testDuration = 0;
 let autoNextTimeout = null;
+let questionTimer = null;
+let questionTimeLeft = 20;
 
 // Элементы DOM
 const questionCard = document.getElementById('questionCard');
@@ -226,6 +228,8 @@ const prevBtn = document.getElementById('prevBtn');
 const finishBtn = document.getElementById('finishBtn');
 const resultsSection = document.getElementById('resultsSection');
 const timerElement = document.getElementById('timer');
+const questionTimerElement = document.getElementById('questionTimer');
+const timerCircle = document.querySelector('.timer-circle');
 
 // Инициализация теста
 function initTest() {
@@ -233,7 +237,8 @@ function initTest() {
     showQuestion();
     updateProgress();
     updateNavigationButtons();
-    startTimer();
+    startTestTimer();
+    startQuestionTimer();
 }
 
 // Отображение текущего вопроса
@@ -270,6 +275,9 @@ function showQuestion() {
 function selectOption(optionIndex) {
     if (testCompleted) return;
 
+    // Останавливаем таймер вопроса
+    stopQuestionTimer();
+
     userAnswers[currentQuestion] = optionIndex;
     showQuestion();
     updateNavigationButtons();
@@ -289,6 +297,7 @@ function selectOption(optionIndex) {
 function nextQuestion() {
     if (currentQuestion < questions.length - 1) {
         currentQuestion++;
+        resetQuestionTimer();
         showQuestion();
         updateProgress();
         updateNavigationButtons();
@@ -300,6 +309,7 @@ function nextQuestion() {
 function prevQuestion() {
     if (currentQuestion > 0) {
         currentQuestion--;
+        resetQuestionTimer();
         showQuestion();
         updateProgress();
         updateNavigationButtons();
@@ -339,18 +349,15 @@ function updateNavigationButtons() {
     }
 }
 
-// Запуск таймера
-function startTimer() {
+// Запуск общего таймера теста
+function startTestTimer() {
     testStartTime = new Date();
-    updateTimer();
-    const timerInterval = setInterval(updateTimer, 1000);
-
-    // Очистка интервала при завершении теста
-    return () => clearInterval(timerInterval);
+    updateTestTimer();
+    setInterval(updateTestTimer, 1000);
 }
 
-// Обновление таймера
-function updateTimer() {
+// Обновление общего таймера теста
+function updateTestTimer() {
     if (!testStartTime) return;
 
     const now = new Date();
@@ -368,9 +375,65 @@ function updateTimer() {
     testDuration = diff;
 }
 
+// Запуск таймера вопроса
+function startQuestionTimer() {
+    questionTimeLeft = 20;
+    updateQuestionTimerDisplay();
+
+    questionTimer = setInterval(() => {
+        questionTimeLeft--;
+        updateQuestionTimerDisplay();
+
+        if (questionTimeLeft <= 0) {
+            stopQuestionTimer();
+            // Автоматический переход к следующему вопросу
+            if (currentQuestion < questions.length - 1) {
+                nextQuestion();
+            } else {
+                updateNavigationButtons();
+            }
+        }
+    }, 1000);
+}
+
+// Обновление отображения таймера вопроса
+function updateQuestionTimerDisplay() {
+    if (questionTimerElement) {
+        questionTimerElement.textContent = questionTimeLeft;
+
+        // Изменяем стили в зависимости от оставшегося времени
+        if (timerCircle) {
+            timerCircle.classList.remove('warning', 'danger');
+
+            if (questionTimeLeft <= 10 && questionTimeLeft > 5) {
+                timerCircle.classList.add('warning');
+            } else if (questionTimeLeft <= 5) {
+                timerCircle.classList.add('danger');
+            }
+        }
+    }
+}
+
+// Остановка таймера вопроса
+function stopQuestionTimer() {
+    if (questionTimer) {
+        clearInterval(questionTimer);
+        questionTimer = null;
+    }
+}
+
+// Сброс таймера вопроса
+function resetQuestionTimer() {
+    stopQuestionTimer();
+    startQuestionTimer();
+}
+
 // Завершение теста
 function finishTest() {
     testCompleted = true;
+
+    // Останавливаем таймер вопроса
+    stopQuestionTimer();
 
     // Подсчет правильных ответов
     let correctCount = 0;
@@ -473,6 +536,7 @@ function restartTest() {
     testStartTime = null;
     testDuration = 0;
     clearTimeout(autoNextTimeout);
+    stopQuestionTimer();
 
     questionCard.style.display = 'block';
     resultsSection.style.display = 'none';
@@ -483,6 +547,15 @@ function restartTest() {
     // Сбрасываем прогресс-бар
     if (progressFill) {
         progressFill.style.width = `${(1 / questions.length) * 100}%`;
+    }
+
+    // Сбрасываем таймер вопроса
+    questionTimeLeft = 20;
+    if (questionTimerElement) {
+        questionTimerElement.textContent = questionTimeLeft;
+    }
+    if (timerCircle) {
+        timerCircle.classList.remove('warning', 'danger');
     }
 
     initTest();
