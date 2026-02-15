@@ -122,6 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка возможности прохождения теста
     function canStartTestToday(user) {
+        if (!user) return false;
         if (user.role === 'admin') return true;
         const today = new Date().toDateString();
         const hasResultToday = user.results.some(r => new Date(r.date).toDateString() === today);
@@ -260,7 +261,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 mainLayout.style.display = 'flex';
                 userMenu.style.display = 'flex';
 
-                const meRes = await fetch('http://localhost:5000/api/users/me', {
+                const meRes = await fetch(`${API_URL}/users/me`, {
                     headers: { 'Authorization': `Bearer ${savedToken}` }
                 });
                 if (meRes.ok) {
