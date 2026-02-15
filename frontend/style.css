@@ -41,7 +41,7 @@ body {
     height: calc(100vh - 30px);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; /* Это важно, чтобы контейнер не скроллился сам */
 }
 
 /* ===== УВЕДОМЛЕНИЯ ===== */
@@ -286,8 +286,8 @@ body {
 .main-layout {
     display: flex;
     gap: 20px;
-    height: calc(100vh - 100px);
-    flex: 1;
+    flex: 1; /* Занимает всё пространство от хедера до низа контейнера */
+    min-height: 0; /* КРИТИЧЕСКИ ВАЖНО для вложенных скроллов */
     overflow: hidden;
 }
 
@@ -399,9 +399,10 @@ body {
     border: 1px solid var(--border-color);
     display: flex;
     flex-direction: column;
-    overflow: hidden;
+    overflow: hidden; /* Обрезает все, что торчит */
+    height: 100%;
     min-height: 0;
-    height: 100%; /* гарантирует, что секция занимает всю доступную высоту */
+    position: relative; /* На всякий случай для позиционирования */
 }
 
 /* ===== ПРЕДСТАРТОВЫЙ ЭКРАН ===== */
@@ -484,7 +485,7 @@ body {
     flex-direction: column;
     flex: 1;
     min-height: 0;
-    height: 100%; /* добавьте эту строку */
+    /*height: 100%; !* добавьте эту строку *!*/
     overflow: hidden;
 }
 
@@ -848,15 +849,33 @@ body {
     background: rgba(15, 28, 50, 0.9);
     border-radius: 12px;
     padding: 20px;
+    padding-bottom: 60px; /* Оставляем запас снизу */
     border: 1px solid var(--border-color);
-    flex: 1;
+
+    /* Вместо flex: 1 или height: 100% делаем так: */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+
     overflow-y: auto;
+    box-sizing: border-box;
     display: none;
-    min-height: 0;
-    height: 100%;       /* занимает всю высоту родителя */
-    max-height: 100%;    /* не позволяет выходить за пределы */
-    box-sizing: border-box; /* padding не увеличивает общую высоту */
 }
+/*.results {*/
+/*    background: rgba(15, 28, 50, 0.9);*/
+/*    border-radius: 12px;*/
+/*    padding: 20px;*/
+/*    border: 1px solid var(--border-color);*/
+/*    flex: 1;*/
+/*    overflow-y: auto;*/
+/*    display: none;*/
+/*    min-height: 0;*/
+/*    height: 100%;       !* занимает всю высоту родителя *!*/
+/*    max-height: 100%;    !* не позволяет выходить за пределы *!*/
+/*    box-sizing: border-box; !* padding не увеличивает общую высоту *!*/
+/*}*/
 
 .results.active {
     display: block;
