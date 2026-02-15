@@ -4,6 +4,7 @@
   "description": "Backend for MAXLINE employee testing",
   "main": "dist/server.js",
   "scripts": {
+    "build": "tsc",
     "dev": "nodemon --inspect dist/server.js",
     "watch": "tsc -w",
     "start": "node dist/server.js"
