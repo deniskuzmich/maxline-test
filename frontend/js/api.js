@@ -127,4 +127,18 @@ export async function resetUserResults(userId) {
     return await res.json();
 }
 
+export async function refreshCurrentUser() {
+    const token = getToken();
+    if (!token) return null;
+    const res = await fetch(`${API_URL}/users/me`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+    if (res.ok) {
+        const user = await res.json();
+        setCurrentUser(user);
+        return user;
+    }
+    return null;
+}
+
 export { API_URL };

@@ -13,7 +13,7 @@ import {
     startTestTimer
 } from './timer.js';
 import { questionsData } from './data/questions.js';
-import { saveTestResult } from './api.js';
+import {refreshCurrentUser, saveTestResult} from './api.js';
 
 // Подготовка и запуск теста
 export function startTest() {
@@ -248,6 +248,7 @@ export async function renderResults(isFinished) {
     try {
         await saveTestResult(result);
         showNotification('Результат сохранён', 'success');
+        await refreshCurrentUser();
         if (typeof window.loadUsers === 'function') {
             window.loadUsers();
         }
