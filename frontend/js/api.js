@@ -126,3 +126,5 @@ export async function resetUserResults(userId) {
     }
     return await res.json();
 }
+
+export { API_URL };

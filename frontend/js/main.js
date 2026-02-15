@@ -2,6 +2,7 @@ import { initElements, state, saveStateToStorage, loadStateFromStorage, clearSta
 import { startTest, resumeTest } from './test.js';
 import { questionsData } from './data/questions.js';
 import {
+    API_URL,
     register, login, logout, fetchUsers, setToken, getToken,
     getCurrentUser, setCurrentUser, deleteUser, resetUserResults
 } from './api.js';
