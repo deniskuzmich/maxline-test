@@ -1,5 +1,5 @@
 // Модуль для работы с API
-const API_URL = 'https://maxline-test.onrender.com'; // изменить на продакшн-URL
+const API_URL = 'https://maxline-test.onrender.com/api'; // изменить на продакшн-URL
 
 // Сохраняем токен в localStorage
 let token = localStorage.getItem('token');
