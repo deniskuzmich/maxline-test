@@ -96,19 +96,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 await login(loginValue, passwordValue);
             }
 
-            const currentUser = getCurrentUser();
-            state.currentUserRole = currentUser.role;
+            // После логина получаем полные данные пользователя с сервера
+            const meRes = await fetch(`${API_URL}/users/me`, {
+                headers: { 'Authorization': `Bearer ${getToken()}` }
+            });
+            if (!meRes.ok) {
+                throw new Error('Не удалось загрузить данные пользователя');
+            }
+            const me = await meRes.json();
+            setCurrentUser(me); // обновляем данные пользователя (теперь есть results и role)
+            state.currentUserRole = me.role;
 
             authModal.style.display = 'none';
             mainLayout.style.display = 'flex';
             userMenu.style.display = 'flex';
-            currentUserLogin.textContent = currentUser.login;
+            currentUserLogin.textContent = me.login;
 
-            loadUsers();
+            loadUsers(); // загружаем список всех пользователей
 
-            preTestScreen.style.display = 'flex';
-            questionContainer.style.display = 'none';
+            // Проверяем, можно ли начать тест
+            if (canStartTestToday(me)) {
+                preTestScreen.style.display = 'flex';
+                questionContainer.style.display = 'none';
+            } else {
+                showNotification('Вы уже проходили тест сегодня. Попробуйте завтра или обратитесь к администратору.', 'error');
+            }
 
+            // Проверяем сохранённое состояние (если есть незавершённый тест)
             if (loadStateFromStorage()) {
                 resumeTest();
                 preTestScreen.style.display = 'none';
@@ -122,10 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Проверка возможности прохождения теста
     function canStartTestToday(user) {
+        // Если пользователь не загружен – нельзя начинать тест
         if (!user) return false;
+
+        // Администраторы могут проходить тест всегда
         if (user.role === 'admin') return true;
+
+        // Если у пользователя нет поля results или это не массив, считаем, что он ещё не проходил тест
+        if (!user.results || !Array.isArray(user.results)) return true;
+
         const today = new Date().toDateString();
-        const hasResultToday = user.results.some(r => new Date(r.date).toDateString() === today);
+        const hasResultToday = user.results.some(result => {
+            // Проверяем, что результат существует и содержит дату
+            return result && result.date && new Date(result.date).toDateString() === today;
+        });
+
         return !hasResultToday;
     }
 
