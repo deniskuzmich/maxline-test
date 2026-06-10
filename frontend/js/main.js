@@ -1,13 +1,19 @@
-import { initElements, state, saveStateToStorage, loadStateFromStorage, clearStateFromStorage } from './state.js';
-import { startTest, resumeTest } from './test.js';
-import { questionsData } from './data/questions.js';
+import {clearStateFromStorage, initElements, loadStateFromStorage, state} from './state.js';
+import {resumeTest, selectOption, startTest} from './test.js';
+import {questionsData} from './data/questions.js';
 import {
     API_URL,
-    register, login, logout, fetchUsers, setToken, getAccessToken,
-    getCurrentUser, setCurrentUser, deleteUser, resetUserResults
+    deleteUser,
+    fetchUsers,
+    getAccessToken,
+    getCurrentUser,
+    login,
+    logout,
+    register,
+    resetUserResults,
+    setCurrentUser
 } from './api.js';
-import { selectOption } from './test.js';
-import { showNotification } from './utils.js';
+import {showNotification} from './utils.js';
 
 window.selectOption = selectOption;
 
