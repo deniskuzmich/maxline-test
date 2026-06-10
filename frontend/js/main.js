@@ -3,7 +3,7 @@ import { startTest, resumeTest } from './test.js';
 import { questionsData } from './data/questions.js';
 import {
     API_URL,
-    register, login, logout, fetchUsers, setToken, getToken,
+    register, login, logout, fetchUsers, setToken, getAccessToken,
     getCurrentUser, setCurrentUser, deleteUser, resetUserResults
 } from './api.js';
 import { selectOption } from './test.js';
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // После логина получаем полные данные пользователя с сервера
             const meRes = await fetch(`${API_URL}/users/me`, {
-                headers: { 'Authorization': `Bearer ${getToken()}` }
+                headers: { 'Authorization': `Bearer ${getAccessToken()}` }
             });
             if (!meRes.ok) {
                 throw new Error('Не удалось загрузить данные пользователя');
@@ -278,7 +278,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    const savedToken = getToken();
+    const savedToken = getAccessToken();
     if (savedToken) {
         (async () => {
             try {
@@ -315,7 +315,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Периодическое обновление списка (каждые 30 секунд)
     setInterval(() => {
-        if (getToken()) {
+        if (getAccessToken()) {
             loadUsers();
         }
     }, 10000);
