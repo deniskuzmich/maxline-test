@@ -1,26 +1,119 @@
 // Модуль для работы с API
 const API_URL = 'https://maxline-test.onrender.com/api';
 
-// Сохраняем токен в localStorage
-let token = localStorage.getItem('token');
+// Инициализируем токены из localStorage
+let accessToken = localStorage.getItem('accessToken');
+let refreshToken = localStorage.getItem('refreshToken');
 let currentUser = null;
 
-export const setToken = (newToken) => {
-    token = newToken;
-    if (newToken) {
-        localStorage.setItem('token', newToken);
+// Переменная, чтобы избежать множественных запросов на обновление,
+// если одновременно упало несколько запросов
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+// Вспомогательная функция для добавления запросов в очередь ожидания нового токена
+const subscribeTokenRefresh = (cb) => {
+    refreshSubscribers.push(cb);
+};
+
+// Вызов всех отложенных запросов после успешного обновления токена
+const onRefreshed = (token) => {
+    refreshSubscribers.map((cb) => cb(token));
+    refreshSubscribers = [];
+};
+
+export const setTokens = (newAccessToken, newRefreshToken) => {
+    accessToken = newAccessToken;
+    refreshToken = newRefreshToken;
+
+    if (newAccessToken) {
+        localStorage.setItem('accessToken', newAccessToken);
     } else {
-        localStorage.removeItem('token');
+        localStorage.removeItem('accessToken');
+    }
+
+    if (newRefreshToken) {
+        localStorage.setItem('refreshToken', newRefreshToken);
+    } else {
+        localStorage.removeItem('refreshToken');
     }
 };
 
-export const getToken = () => token;
+export const getAccessToken = () => accessToken;
+export const getRefreshToken = () => refreshToken;
 
 export const setCurrentUser = (user) => {
     currentUser = user;
 };
 
 export const getCurrentUser = () => currentUser;
+
+// Универсальная обертка над fetch, которая сама обрабатывает 401 ошибку и обновляет токен
+async function authenticatedFetch(url, options = {}) {
+    // Гарантируем наличие заголовков
+    options.headers = options.headers || {};
+
+    // Если есть accessToken, добавляем его в каждый запрос
+    if (accessToken) {
+        options.headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+
+    const res = await fetch(url, options);
+
+    // Если получили 401, пробуем обновить токен
+    if (res.status === 401) {
+        if (!refreshToken) {
+            logout();
+            throw new Error('Сессия истекла, войдите снова');
+        }
+
+        // Если обновление уже идет, ставим запрос в очередь
+        if (isRefreshing) {
+            return new Promise((resolve) => {
+                subscribeTokenRefresh((newToken) => {
+                    options.headers['Authorization'] = `Bearer ${newToken}`;
+                    resolve(fetch(url, options));
+                });
+            });
+        }
+
+        isRefreshing = true;
+
+        try {
+            // Запрос на бэкенд для обновления токена
+            const refreshRes = await fetch(`${API_URL}/auth/refresh`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ refreshToken })
+            });
+
+            if (!refreshRes.ok) {
+                // Если refresh-токен тоже протух/невалиден
+                throw new Error('Refresh token invalid');
+            }
+
+            const data = await refreshRes.json();
+            // Предполагаем, что бэкенд вернет { accessToken, refreshToken }
+            setTokens(data.accessToken, data.refreshToken);
+
+            isRefreshing = false;
+            onRefreshed(data.accessToken);
+
+            // Повторяем исходный запрос с новым токеном
+            options.headers['Authorization'] = `Bearer ${data.accessToken}`;
+            return await fetch(url, options);
+
+        } catch (error) {
+            isRefreshing = false;
+            logout();
+            throw new Error('Сессия истекла, войдите снова');
+        }
+    }
+
+    return res;
+}
+
+// === API МЕТОДЫ ===
 
 // Регистрация
 export async function register(login, password) {
@@ -48,30 +141,23 @@ export async function login(login, password) {
         throw new Error(err.message || 'Ошибка входа');
     }
     const data = await res.json();
-    setToken(data.token);
-    setCurrentUser(data);
+
+    // Бэкенд должен отдавать оба токена при логине
+    setTokens(data.accessToken, data.refreshToken);
+    setCurrentUser(data.user || data);
     return data;
 }
 
 // Выход
 export function logout() {
-    setToken(null);
+    setTokens(null, null);
     setCurrentUser(null);
-    localStorage.removeItem('token');
 }
 
 // Получить список пользователей с результатами
 export async function fetchUsers() {
-    const res = await fetch(`${API_URL}/users`, {
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
-    });
+    const res = await authenticatedFetch(`${API_URL}/users`);
     if (!res.ok) {
-        if (res.status === 401) {
-            logout();
-            throw new Error('Сессия истекла, войдите снова');
-        }
         throw new Error('Ошибка загрузки списка');
     }
     return await res.json();
@@ -79,19 +165,12 @@ export async function fetchUsers() {
 
 // Сохранить результат теста
 export async function saveTestResult(result) {
-    const res = await fetch(`${API_URL}/test/result`, {
+    const res = await authenticatedFetch(`${API_URL}/test/result`, {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(result)
     });
     if (!res.ok) {
-        if (res.status === 401) {
-            logout();
-            throw new Error('Сессия истекла');
-        }
         throw new Error('Ошибка сохранения результата');
     }
     return await res.json();
@@ -99,11 +178,8 @@ export async function saveTestResult(result) {
 
 // Удалить пользователя (только админ)
 export async function deleteUser(userId) {
-    const res = await fetch(`${API_URL}/users/${userId}`, {
-        method: 'DELETE',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+    const res = await authenticatedFetch(`${API_URL}/users/${userId}`, {
+        method: 'DELETE'
     });
     if (!res.ok) {
         const err = await res.json();
@@ -114,11 +190,8 @@ export async function deleteUser(userId) {
 
 // Сбросить результаты пользователя (только админ)
 export async function resetUserResults(userId) {
-    const res = await fetch(`${API_URL}/users/${userId}/reset`, {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${token}`
-        }
+    const res = await authenticatedFetch(`${API_URL}/users/${userId}/reset`, {
+        method: 'POST'
     });
     if (!res.ok) {
         const err = await res.json();
@@ -128,11 +201,8 @@ export async function resetUserResults(userId) {
 }
 
 export async function refreshCurrentUser() {
-    const token = getToken();
-    if (!token) return null;
-    const res = await fetch(`${API_URL}/users/me`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
+    if (!getAccessToken()) return null;
+    const res = await authenticatedFetch(`${API_URL}/users/me`);
     if (res.ok) {
         const user = await res.json();
         setCurrentUser(user);
