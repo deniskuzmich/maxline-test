@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Установка количества вопросов в предстартовом экране
     document.getElementById('preTestQuestionCount').textContent = questionsData.length;
-    document.getElementById('preTestQuestionCountInfo').textContent = questionsData.length + ' вопрос';
+    document.getElementById('preTestQuestionCountInfo').textContent = questionsData.length + ' вопроса';
 
     loginTab.addEventListener('click', () => {
         loginTab.classList.add('active');
