@@ -18,7 +18,7 @@ export function updateQuestionTimerDisplay() {
 
 // Запуск таймера вопроса
 export function startQuestionTimer() {
-    state.questionTimeLeft = 35;
+    state.questionTimeLeft = 30;
     updateQuestionTimerDisplay();
 
     state.questionTimer = setInterval(() => {

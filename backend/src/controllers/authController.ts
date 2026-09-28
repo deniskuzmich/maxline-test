@@ -3,6 +3,9 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import User from '../models/User';
 
+// Единый фолбэк на случай отсутствия JWT_REFRESH_SECRET в .env
+const REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || 'dwheuiy33y78937g663nnfyf6366238934848634fg34uf';
+
 // Вспомогательная функция для генерации пары токенов
 const generateTokens = (payload: { userId: string; role: string }) => {
   // Access токен живет мало (например, 15 минут)
@@ -15,7 +18,7 @@ const generateTokens = (payload: { userId: string; role: string }) => {
   // Refresh токен живет долго (например, 7 дней)
   const refreshToken = jwt.sign(
     payload,
-    process.env.JWT_REFRESH_SECRET || 'dwheuiy33y78937g663nnfyf6366238934848634fg34uf',
+    REFRESH_SECRET,
     { expiresIn: '7d' }
   );
 
@@ -91,7 +94,7 @@ export const refresh = async (req: Request, res: Response) => {
     // Проверяем валидность рефреш-токена
     jwt.verify(
       refreshToken,
-      process.env.JWT_REFRESH_SECRET || 'super_secret_refresh_key',
+      REFRESH_SECRET,
       (err: any, decoded: any) => {
         if (err) {
           // Если токен просрочен или изменен — шлем 403 (Forbidden) или 401

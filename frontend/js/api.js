@@ -1,5 +1,7 @@
 // Модуль для работы с API
-const API_URL = 'https://maxline-test.onrender.com/api';
+// URL можно переопределить для локальной разработки:
+// localStorage.setItem('apiUrl', 'http://localhost:5000/api')
+const API_URL = localStorage.getItem('apiUrl') || 'https://maxline-test.onrender.com/api';
 
 // Инициализируем токены из localStorage
 let accessToken = localStorage.getItem('accessToken');

@@ -199,6 +199,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
+    // Даём доступ извне (например, из test.js после сохранения результата)
+    window.loadUsers = loadUsers;
+
     function renderUsers(users) {
         usersList.innerHTML = '';
         const currentUser = getCurrentUser();
@@ -319,7 +322,7 @@ document.addEventListener('DOMContentLoaded', () => {
         })();
     }
 
-    // Периодическое обновление списка (каждые 30 секунд)
+    // Периодическое обновление списка (каждые 10 секунд)
     setInterval(() => {
         if (getAccessToken()) {
             loadUsers();
