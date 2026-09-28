@@ -6,16 +6,14 @@ export const getUsersWithLastResult = async () => {
   const users = await User.find({}, 'login role results').lean();
 
   return users.map(user => {
-    const passedDurations = user.results
-      .filter(r => r.passed)
-      .map(r => r.duration);
+    const durations = user.results.map(r => r.duration);
 
     return {
       _id: user._id,
       login: user.login,
       role: user.role,
-      // Минимальное время среди сданных попыток (секунды)
-      bestTime: passedDurations.length > 0 ? Math.min(...passedDurations) : null,
+      // Минимальное время среди всех попыток (секунды)
+      bestTime: durations.length > 0 ? Math.min(...durations) : null,
       lastResult: user.results.length > 0
         ? {
             date: user.results[user.results.length - 1].date,

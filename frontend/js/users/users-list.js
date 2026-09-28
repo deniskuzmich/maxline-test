@@ -77,12 +77,13 @@ function renderUsers(users) {
                 </div>
                 <div class="user-date">${date}</div>
             `;
-            if (user.bestTime != null) {
-                resultHtml += `<div class="user-best-time">Лучшее время: ${formatDuration(user.bestTime)}</div>`;
-            }
         } else {
             resultHtml = '<div class="user-result">Тест не пройден</div>';
         }
+        // Лучшее время показываем под каждым пользователем
+        resultHtml += user.bestTime != null
+            ? `<div class="user-best-time">Лучшее время: ${formatDuration(user.bestTime)}</div>`
+            : '<div class="user-best-time">Лучшее время: —</div>';
 
         // Если текущий админ и это не он сам
         if (currentUser && currentUser.role === 'admin' && user._id !== currentUser._id) {

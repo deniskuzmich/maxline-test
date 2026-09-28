@@ -819,6 +819,31 @@ body {
     cursor: not-allowed;
 }
 
+/* Эффект нажатия */
+.btn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: none;
+}
+
+.btn-start:active {
+    transform: translateY(1px) scale(0.97);
+    box-shadow: 0 2px 8px rgba(0, 255, 136, 0.3);
+}
+
+.tab-btn:active {
+    transform: scale(0.97);
+}
+
+.btn-logout:active {
+    transform: scale(0.96);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.btn-reset:active,
+.btn-delete:active {
+    transform: scale(0.95);
+}
+
 .btn-start {
     padding: 18px 50px;
     font-size: 20px;
