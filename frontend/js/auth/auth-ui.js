@@ -93,4 +93,13 @@ export function initAuth(onAuthorized) {
         authError.textContent = '';
         state.currentUserRole = 'user';
     });
+
+    // Enter в полях логина/пароля — то же, что клик по кнопке
+    [authLogin, authPassword].forEach(input => {
+        input.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                authActionBtn.click();
+            }
+        });
+    });
 }

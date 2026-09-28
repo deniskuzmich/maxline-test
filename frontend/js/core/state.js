@@ -8,7 +8,8 @@ export const state = {
     testDuration: 0,
     autoNextTimeout: null,
     questionTimer: null,
-    questionTimeLeft: 30,
+    questionTimeLeft: 35,
+    questionDeadline: null, // абсолютный дедлайн текущего вопроса (timestamp)
     totalCorrect: 0,
     totalWrong: 0,
     MAX_WRONG: 2,
@@ -50,7 +51,9 @@ export function saveStateToStorage() {
         totalCorrect: state.totalCorrect,
         totalWrong: state.totalWrong,
         testDuration: state.testDuration,
-        // Не сохраняем таймеры и время старта, они будут перезапущены
+        testStartTime: state.testStartTime,
+        questionDeadline: state.questionDeadline,
+        // Интервалы не сохраняем, они будут перезапущены
     };
     localStorage.setItem('testState', JSON.stringify(storage));
 }
@@ -74,6 +77,8 @@ export function loadStateFromStorage() {
             state.totalCorrect = data.totalCorrect || 0;
             state.totalWrong = data.totalWrong || 0;
             state.testDuration = data.testDuration || 0;
+            state.testStartTime = data.testStartTime ? new Date(data.testStartTime) : null;
+            state.questionDeadline = data.questionDeadline || null;
             return true;
         } catch (e) {
             console.warn('Ошибка загрузки состояния', e);

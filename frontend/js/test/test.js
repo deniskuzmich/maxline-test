@@ -33,7 +33,7 @@ export function startTest() {
 export function resumeTest() {
     // Предполагается, что state уже загружен из localStorage
     if (!state.questions || state.questions.length === 0) return;
-    state.testStartTime = new Date(); // перезапускаем общий таймер (можно было бы восстановить разницу, но проще заново)
+    // testStartTime и questionDeadline восстановлены из localStorage — таймеры не сбрасываем
     state.testCompleted = false;
     showQuestion();
     updateProgress();
