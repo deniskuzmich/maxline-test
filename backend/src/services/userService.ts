@@ -5,20 +5,28 @@ import { ApiError } from '../utils/ApiError';
 export const getUsersWithLastResult = async () => {
   const users = await User.find({}, 'login role results').lean();
 
-  return users.map(user => ({
-    _id: user._id,
-    login: user.login,
-    role: user.role,
-    lastResult: user.results.length > 0
-      ? {
-          date: user.results[user.results.length - 1].date,
-          duration: user.results[user.results.length - 1].duration,
-          passed: user.results[user.results.length - 1].passed,
-          correctCount: user.results[user.results.length - 1].correctCount,
-          totalQuestions: user.results[user.results.length - 1].totalQuestions,
-        }
-      : null,
-  }));
+  return users.map(user => {
+    const passedDurations = user.results
+      .filter(r => r.passed)
+      .map(r => r.duration);
+
+    return {
+      _id: user._id,
+      login: user.login,
+      role: user.role,
+      // Минимальное время среди сданных попыток (секунды)
+      bestTime: passedDurations.length > 0 ? Math.min(...passedDurations) : null,
+      lastResult: user.results.length > 0
+        ? {
+            date: user.results[user.results.length - 1].date,
+            duration: user.results[user.results.length - 1].duration,
+            passed: user.results[user.results.length - 1].passed,
+            correctCount: user.results[user.results.length - 1].correctCount,
+            totalQuestions: user.results[user.results.length - 1].totalQuestions,
+          }
+        : null,
+    };
+  });
 };
 
 // Бросает 404, если пользователя нет

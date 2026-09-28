@@ -44,6 +44,13 @@ export async function loadUsers() {
     }
 }
 
+// Форматирует секунды: 75 -> "1 мин 15 сек", 45 -> "45 сек"
+function formatDuration(seconds) {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return m > 0 ? `${m} мин ${s} сек` : `${s} сек`;
+}
+
 function renderUsers(users) {
     const usersList = document.getElementById('usersList');
     usersList.innerHTML = '';
@@ -70,6 +77,9 @@ function renderUsers(users) {
                 </div>
                 <div class="user-date">${date}</div>
             `;
+            if (user.bestTime != null) {
+                resultHtml += `<div class="user-best-time">Лучшее время: ${formatDuration(user.bestTime)}</div>`;
+            }
         } else {
             resultHtml = '<div class="user-result">Тест не пройден</div>';
         }
