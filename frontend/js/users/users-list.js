@@ -76,14 +76,14 @@ function renderUsers(users) {
                     <span>${user.lastResult.passed ? '✓' : '✗'}</span>
                 </div>
                 <div class="user-date">${date}</div>
+                <div class="user-duration">Время прохождения: ${formatDuration(user.lastResult.duration)}</div>
             `;
         } else {
-            resultHtml = '<div class="user-result">Тест не пройден</div>';
+            resultHtml = `
+                <div class="user-result">Тест не пройден</div>
+                <div class="user-duration">Время прохождения: —</div>
+            `;
         }
-        // Лучшее время показываем под каждым пользователем
-        resultHtml += user.bestTime != null
-            ? `<div class="user-best-time">Лучшее время: ${formatDuration(user.bestTime)}</div>`
-            : '<div class="user-best-time">Лучшее время: —</div>';
 
         // Если текущий админ и это не он сам
         if (currentUser && currentUser.role === 'admin' && user._id !== currentUser._id) {
